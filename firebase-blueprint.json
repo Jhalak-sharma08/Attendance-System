@@ -1,0 +1,57 @@
+{
+  "entities": {
+    "Course": {
+      "title": "Course",
+      "description": "A college course or subject.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "code": { "type": "string" },
+        "instructor": { "type": "string" },
+        "department": { "type": "string" }
+      },
+      "required": ["id", "name", "code", "instructor", "department"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "A student registered in the college system.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "rollNumber": { "type": "string" },
+        "email": { "type": "string" },
+        "courseIds": { "type": "array" }
+      },
+      "required": ["id", "name", "rollNumber", "email", "courseIds"]
+    },
+    "Session": {
+      "title": "Session",
+      "description": "An attendance taking session for a specific course.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "courseId": { "type": "string" },
+        "date": { "type": "string" },
+        "topic": { "type": "string" },
+        "attendance": { "type": "object" }
+      },
+      "required": ["id", "courseId", "date", "topic", "attendance"]
+    }
+  },
+  "firestore": {
+    "courses/{courseId}": {
+      "schema": "Course",
+      "description": "Collection of courses."
+    },
+    "students/{studentId}": {
+      "schema": "Student",
+      "description": "Collection of students."
+    },
+    "sessions/{sessionId}": {
+      "schema": "Session",
+      "description": "Collection of sessions with recorded student attendance."
+    }
+  }
+}

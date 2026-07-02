@@ -1,0 +1,52 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper to validate IDs (alphanumeric and hyphens/underscores)
+    function isValidId(id) {
+      return id.size() > 0 && id.size() < 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Helper to validate basic non-empty string
+    function isValidString(val, min, max) {
+      return val is string && val.size() >= min && val.size() <= max;
+    }
+
+    match /courses/{courseId} {
+      allow read: if true;
+      allow write: if isValidId(courseId)
+        && request.resource.data.keys().hasAll(['id', 'name', 'code', 'instructor', 'department'])
+        && request.resource.data.keys().size() == 5
+        && isValidString(request.resource.data.id, 1, 100)
+        && isValidString(request.resource.data.name, 1, 100)
+        && isValidString(request.resource.data.code, 1, 20)
+        && isValidString(request.resource.data.instructor, 1, 100)
+        && isValidString(request.resource.data.department, 1, 100);
+    }
+
+    match /students/{studentId} {
+      allow read: if true;
+      allow write: if isValidId(studentId)
+        && request.resource.data.keys().hasAll(['id', 'name', 'rollNumber', 'email', 'courseIds'])
+        && request.resource.data.keys().size() == 5
+        && isValidString(request.resource.data.id, 1, 100)
+        && isValidString(request.resource.data.name, 1, 100)
+        && isValidString(request.resource.data.rollNumber, 1, 50)
+        && isValidString(request.resource.data.email, 1, 100)
+        && request.resource.data.courseIds is list
+        && request.resource.data.courseIds.size() <= 50;
+    }
+
+    match /sessions/{sessionId} {
+      allow read: if true;
+      allow write: if isValidId(sessionId)
+        && request.resource.data.keys().hasAll(['id', 'courseId', 'date', 'topic', 'attendance'])
+        && request.resource.data.keys().size() == 5
+        && isValidString(request.resource.data.id, 1, 100)
+        && isValidString(request.resource.data.courseId, 1, 100)
+        && isValidString(request.resource.data.date, 10, 10)
+        && isValidString(request.resource.data.topic, 1, 200)
+        && request.resource.data.attendance is map;
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "College Attendance System",
+  "description": "A robust, highly polished attendance tracking system for college professors and students, allowing real-time roll calls, analytics, and record export.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
